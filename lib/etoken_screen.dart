@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kiteflux/home_screen.dart';
+import 'package:kiteflux/kiteconnect.dart';
 
 class Etoken extends StatefulWidget {  
   
@@ -12,20 +14,30 @@ const Etoken({ Key? key }) : super(key: key);
 
 class EtokenState extends State<Etoken> {
 
-  List<dynamic> BeatsList = [];
-
+  TextEditingController textFieldController = TextEditingController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+  }
+
+  Future<List> connectwithkite (String enctoken) async {
+    var kite = kiteconnect(enctoken);
+    // var positions = await kite.positions();
+    // await Future.delayed(Duration(seconds: 2));
+    // print(positions);
+    // var x = positions['data']["day"][1]['tradingsymbol'];
+    // return (x);
+    var instruments = await kite.instruments("NFO");
+    print(instruments);
+    return (instruments);
   }
 
   @override
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      backgroundColor: Color.fromARGB(247, 255, 104, 104),
+      backgroundColor: const Color.fromARGB(247, 255, 104, 104),
       title: const Text('Kiteflux'),
     ),
     body: Column(
@@ -33,15 +45,16 @@ Widget build(BuildContext context) {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         SizedBox(height: 250,),
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: TextField(
+            controller: textFieldController,
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.teal)
+                borderSide: BorderSide(color: Colors.teal)
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Color.fromARGB(247, 255, 104, 104))
+                borderSide: BorderSide(color: Color.fromARGB(247, 255, 104, 104))
               ),
               border: OutlineInputBorder(),
               labelText: 'EncToken',
@@ -57,7 +70,14 @@ Widget build(BuildContext context) {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(32.0)),
             ),
-          onPressed: () {},
+          onPressed: () async {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => home_screen(enctoken: textFieldController.text),
+                ),
+              );
+          },
           child: const Text('Submit', style: TextStyle(color: Colors.teal, fontSize: 15)),
         ),
       ],
@@ -68,3 +88,18 @@ Widget build(BuildContext context) {
   
   
 }
+
+
+
+// List y = await connectwithkite(textFieldController.text);
+//             String z = y.toString();
+//             showDialog(
+//             context: context,
+//             builder: (context) {
+//               return AlertDialog(
+//                 // Retrieve the text the that user has entered by using the
+//                 // TextEditingController.
+//                 content: Text(z),
+//               );
+//             },
+//           );
