@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kiteflux/home_screen.dart';
 import 'package:kiteflux/kiteconnect.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Etoken extends StatefulWidget {  
   
@@ -21,16 +22,8 @@ class EtokenState extends State<Etoken> {
     super.initState();
   }
 
-  Future<List> connectwithkite (String enctoken) async {
-    var kite = kiteconnect(enctoken);
-    // var positions = await kite.positions();
-    // await Future.delayed(Duration(seconds: 2));
-    // print(positions);
-    // var x = positions['data']["day"][1]['tradingsymbol'];
-    // return (x);
-    var instruments = await kite.instruments("NFO");
-    print(instruments);
-    return (instruments);
+  connectwithkite (String enctoken) async {
+    kiteconnect(enctoken);
   }
 
   @override
@@ -71,12 +64,42 @@ Widget build(BuildContext context) {
                   borderRadius: BorderRadius.circular(32.0)),
             ),
           onPressed: () async {
-            Navigator.push(
+            if(await kiteconnect(textFieldController.text).check_connection() == true){
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => home_screen(enctoken: textFieldController.text),
                 ),
               );
+            }
+            else{
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(
+                      "Error",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    content: Text(
+                      "Invalid Enc Token!",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    backgroundColor: Colors.white,
+                  );
+                },
+              );
+
+            }
           },
           child: const Text('Submit', style: TextStyle(color: Colors.teal, fontSize: 15)),
         ),
@@ -103,3 +126,12 @@ Widget build(BuildContext context) {
 //               );
 //             },
 //           );
+
+
+// var positions = await kite.positions();
+    // await Future.delayed(Duration(seconds: 2));
+    // print(positions);
+    // var x = positions['data']["day"][1]['tradingsymbol'];
+    // return (x);
+    // var instruments = await kite.instruments("NFO");
+    // print(instruments);

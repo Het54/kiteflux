@@ -78,6 +78,16 @@ class kiteconnect{
     session.get(Uri.parse(rootUrl), headers: headers);
   }
 
+  Future<bool> check_connection() async {
+    var response = await session.get(Uri.parse('$rootUrl/portfolio/positions'), headers: headers);
+    
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> instruments(String s, {String? exchange}) async {
     var response = await session.get(Uri.parse('$rootUrl/instruments'), headers: headers);
     var data = response.body.split("\n");
