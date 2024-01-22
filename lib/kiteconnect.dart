@@ -90,22 +90,22 @@ class kiteconnect{
 
   Future<List<Map<String, dynamic>>> instruments(String s, {String? exchange}) async {
     var response = await session.get(Uri.parse('$rootUrl/instruments'), headers: headers);
-    var data = response.body.split("\n");
+    var data = response.body.split('\n');
     List<Map<String, dynamic>> exchangeList = [];
 
-    for (var i in data.sublist(1, data.length - 1)) {
-      var row = i.split(",");
+    for (var i = 1; i < data.length - 1; i++) {
+      var row = data[i].split(',');
       if (exchange == null || exchange == row[11]) {
         exchangeList.add({
-          'instrument_token': int.parse(row[0]),
+          'instrument_token': int.tryParse(row[0]) ?? 0,
           'exchange_token': row[1],
           'tradingsymbol': row[2],
-          'name': row[3].substring(1, row[3].length - 1),
-          'last_price': double.parse(row[4]),
-          'expiry': row[5] != "" ? DateTime.parse(row[5]).toLocal().toLocal() : null,
-          'strike': double.parse(row[6]),
-          'tick_size': double.parse(row[7]),
-          'lot_size': int.parse(row[8]),
+          'name': row[3].replaceAll('"', ''),
+          'last_price': double.tryParse(row[4]) ?? 0.0,
+          'expiry': row[5].isNotEmpty ? DateTime.parse(row[5]).toLocal() : null,
+          'strike': double.tryParse(row[6]) ?? 0.0,
+          'tick_size': double.tryParse(row[7]) ?? 0.0,
+          'lot_size': int.tryParse(row[8]) ?? 0,
           'instrument_type': row[9],
           'segment': row[10],
           'exchange': row[11],

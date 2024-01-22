@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kiteflux/Position/position_screen.dart';
 import 'package:kiteflux/home_screen.dart';
 import 'package:kiteflux/kiteconnect.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Etoken extends StatefulWidget {  
   
@@ -29,10 +29,7 @@ class EtokenState extends State<Etoken> {
   @override
 Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(
-      backgroundColor: const Color.fromARGB(247, 255, 104, 104),
-      title: const Text('Kiteflux'),
-    ),
+    appBar: AppBar(title: const Text('KiteFlux')),
     body: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,7 +65,8 @@ Widget build(BuildContext context) {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => home_screen(enctoken: textFieldController.text),
+                  builder: (context) => home_screen(
+                    enctoken: textFieldController.text),
                 ),
               );
             }
