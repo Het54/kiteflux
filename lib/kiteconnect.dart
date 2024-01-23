@@ -128,4 +128,11 @@ class kiteconnect{
     }
   }
 
+
+  Future<Map<String, dynamic>> ltp(String instruments) async {
+    var response = await session.get(Uri.parse('$rootUrl/quote/ltp?i=$instruments'), headers: headers);
+    var data = json.decode(response.body)["data"];
+    return data;
+  }
+
 }
