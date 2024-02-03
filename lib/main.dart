@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kiteflux/Background_Service/background_service.dart';
 import 'package:kiteflux/etoken_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeService();
   runApp(const MyApp());
 }
 

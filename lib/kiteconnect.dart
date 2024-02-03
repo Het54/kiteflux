@@ -135,4 +135,12 @@ class kiteconnect{
     return data;
   }
 
+
+  Future<Map<String, dynamic>> quote(String instruments) async {
+    var response = await session.get(Uri.parse('$rootUrl/quote?i=$instruments'), headers: headers);
+    var data = json.decode(response.body)["data"];
+    return data;
+  }
+  
+
 }
