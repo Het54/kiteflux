@@ -141,6 +141,51 @@ class kiteconnect{
     var data = json.decode(response.body)["data"];
     return data;
   }
-  
 
+  Future<String?> placeOrder(
+    String variety,
+    String exchange,
+    String tradingsymbol,
+    String transactionType,
+    int quantity,
+    String product,
+    String orderType, 
+    double? price,
+    String? validity,
+    int? disclosedQuantity,
+    double? triggerPrice,
+    dynamic squareoff,
+    dynamic stoploss,
+    dynamic trailingStoploss,
+    dynamic tag,
+  ) async {
+    Map<String, dynamic> params = {
+      "variety": variety,
+      "exchange": exchange,
+      "tradingsymbol": tradingsymbol,
+      "transaction_type": transactionType,
+      "quantity": quantity,
+      "product": product,
+      "order_type": orderType,
+      if (price != null) "price": price,
+      if (validity != null) "validity": validity,
+      if (disclosedQuantity != null) "disclosed_quantity": disclosedQuantity,
+      if (triggerPrice != null) "trigger_price": triggerPrice,
+      if (squareoff != null) "squareoff": squareoff,
+      if (stoploss != null) "stoploss": stoploss,
+      if (trailingStoploss != null) "trailing_stoploss": trailingStoploss,
+      if (tag != null) "tag": tag,
+    };
+
+    params.removeWhere((key, value) => value == null);
+
+    var response = await session.post(
+      Uri.parse('$rootUrl/orders/$variety'),
+      headers: headers,
+      body: params,
+    );
+
+    var orderId = response.body.isEmpty ? null : json.decode(response.body)["data"]["order_id"];
+    return orderId;
+  }
 }

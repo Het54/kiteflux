@@ -181,9 +181,16 @@ class watchlist_screenState extends State<watchlist_screen> {
                                             builder: (context) => order_screen(
                                               enctoken: widget.enctoken,
                                               triggerPrice: triggerPrice,
-                                              tradingsymbol: instrument['tradingsymbol']),
+                                              tradingsymbol: instrument['tradingsymbol'],
+                                              targetPrice: 0.00,
+                                              stoplossPrice: 0.00,
+                                              quantity: 0,
+                                              productType: Null,
+                                              exchange: Null,),
+
                                           ),
                                         );
+                                        
                                       } else {
                                         // Show an error message if trigger price is not entered
                                         ScaffoldMessenger.of(context).showSnackBar(

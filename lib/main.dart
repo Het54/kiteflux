@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeService();
+  // await initializeService();
   runApp(const MyApp());
 }
 
