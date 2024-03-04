@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kiteflux/Orders/order_screen.dart';
 import 'package:kiteflux/home_screen.dart';
 import 'package:kiteflux/kiteconnect.dart';
@@ -19,6 +20,10 @@ class watchlist_screenState extends State<watchlist_screen> {
   late String enctoken;
   List<Map<String, dynamic>> allInstruments = [];
   List<Map<String, dynamic>> filteredInstruments = [];
+  String orderType = 'MIS';
+  String posType = "Buy";
+  TextEditingController triggerPriceController = TextEditingController();
+  TextEditingController quantityController = TextEditingController();
 
   bool isDisposed = false;
 
@@ -80,6 +85,7 @@ class watchlist_screenState extends State<watchlist_screen> {
       });
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -128,32 +134,86 @@ class watchlist_screenState extends State<watchlist_screen> {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              TextEditingController triggerPriceController = TextEditingController();
-
                               return AlertDialog(
                                 title: Text(
                                   "Trigger Price based on ${instrument['name']}",
                                   style: TextStyle(
                                     color: Colors.red,
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 18, // Increased font size for title
                                   ),
                                 ),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start, // Align content to left
                                   children: [
                                     Text(
-                                      "Enter Trigger Price:",
+                                      "Position Type:",
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(height: 8.0),
+                                    DropdownButtonFormField<String>(
+                                      value: posType,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          posType = value!;
+                                        });
+                                      },
+                                      items: ['Buy', 'Sell']
+                                          .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            },
+                                          )
+                                          .toList(),
+                                    ),
+                                    SizedBox(height: 12.0), // Increased spacing for better readability
+                                    Text(
+                                      "Order Type:",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    DropdownButtonFormField<String>(
+                                      value: orderType,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          orderType = value!;
+                                        });
+                                      },
+                                      items: ['MIS', 'NRML']
+                                          .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            },
+                                          )
+                                          .toList(),
+                                    ),
+                                    SizedBox(height: 12.0), // Increased spacing for better readability
                                     TextFormField(
                                       controller: triggerPriceController,
-                                      keyboardType: TextInputType.number,
+                                      keyboardType: TextInputType.numberWithOptions(decimal: true),
                                       decoration: InputDecoration(
                                         hintText: 'Enter trigger price',
+                                      ),
+                                    ),
+                                    SizedBox(height: 12.0), // Increased spacing for better readability
+                                    TextFormField(
+                                      controller: quantityController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                        hintText: 'Enter Quantity',
                                       ),
                                     ),
                                   ],
@@ -179,13 +239,15 @@ class watchlist_screenState extends State<watchlist_screen> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => order_screen(
+                                              identifier: "watchlist_screen",
                                               enctoken: widget.enctoken,
                                               triggerPrice: triggerPrice,
                                               tradingsymbol: instrument['tradingsymbol'],
+                                              posType: posType,
                                               targetPrice: 0.00,
                                               stoplossPrice: 0.00,
-                                              quantity: 0,
-                                              productType: Null,
+                                              quantity: int.parse(quantityController.text),
+                                              productType: orderType,
                                               exchange: Null,),
 
                                           ),

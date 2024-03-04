@@ -5,9 +5,11 @@ import 'package:kiteflux/kiteconnect.dart';
 
 
 class order_screen extends StatefulWidget {
-  const order_screen({Key? key, required this.enctoken, required this.triggerPrice, required this.tradingsymbol, required this.targetPrice, required this.stoplossPrice, required this.quantity, required this.productType, required this.exchange}) : super(key: key);
+  const order_screen({Key? key, required this.identifier, required this.enctoken, required this.triggerPrice, required this.tradingsymbol, required this.targetPrice, required this.stoplossPrice, required this.quantity, required this.productType, required this.exchange, required this.posType}) : super(key: key);
 
+  final String identifier;
   final String enctoken;
+  final String posType;
   final double triggerPrice;
   final dynamic tradingsymbol;
   final double targetPrice;
@@ -21,7 +23,9 @@ class order_screen extends StatefulWidget {
 }
 
 class order_screenState extends State<order_screen> {
+  late String identifier;
   late String enctoken; 
+  late String posType;
   late double triggerPrice;
   late dynamic tradingsymbol;
   late double targetPrice;
@@ -37,6 +41,7 @@ class order_screenState extends State<order_screen> {
   @override
   void initState() {
     super.initState();
+    identifier = widget.identifier;
     enctoken = widget.enctoken;
     triggerPrice = widget.triggerPrice;
     tradingsymbol = widget.tradingsymbol;
@@ -44,11 +49,12 @@ class order_screenState extends State<order_screen> {
     stoplossPrice = widget.stoplossPrice;
     quantity = widget.quantity;
     productType = widget.productType;
+    posType = widget.posType;
     exchange = widget.exchange;
     RegExp regex = RegExp(r'^[a-zA-Z]+');
     Match? match = regex.firstMatch(tradingsymbol);
     index_name = match?.group(0) ?? '';
-    if(tradingsymbol!="Null"){
+    if(identifier == "position_screen"){
       OrderList.add(
         {
           "tradingsymbol": tradingsymbol,
@@ -59,15 +65,29 @@ class order_screenState extends State<order_screen> {
           "exchange": exchange,
         }
       );
+      get_last_price_position();
     }
-    get_last_price();
+
+    else if(identifier == "watchlist_screen"){
+      OrderList.add(
+        {
+          "tradingsymbol": tradingsymbol,
+          "triggerprice": triggerPrice,
+          "quantity": quantity,
+          "product": productType,
+        }
+      );
+      get_last_price_watchlist();
+    }
+
+
+    
   }
 
 
 
-  get_last_price() async {
+  get_last_price_position() async {
     for(int i=0; i<OrderList.length; i++){
-      String exchange = OrderList[i]['exchange'];
       String result = "";
       if(index_name == "NIFTY"){
         result = 'NSE:NIFTY 50';
@@ -79,7 +99,6 @@ class order_screenState extends State<order_screen> {
         result = 'NSE:NIFTY FIN SERVICE';
       }
       var kite = kiteconnect(enctoken);
-      var index_lp = await kite.ltp(result);
 
       
       
@@ -93,55 +112,157 @@ class order_screenState extends State<order_screen> {
       }
 
       if(quantity>0){ //Buy Position
+      
         if(op_type == 'CE'){
-          while(true){
+          final periodicTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+            var index_lp = await kite.ltp(result);
+            indexlp = index_lp[result]['last_price'];
             setState(() {
-              indexlp = index_lp[result]['last_price'];
             });
             if(indexlp>=targetPrice || indexlp<=stoplossPrice){
               sell_order(tradingsymbol, quantity, productType);
-              break;
+              timer.cancel();
             }              
-          }
+            },
+          );
         }
 
         else if(op_type == 'PE'){
-          while(true){
+          final periodicTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+            var index_lp = await kite.ltp(result);
+            indexlp = index_lp[result]['last_price'];
             setState(() {
-              indexlp = index_lp[result]['last_price'];
             });
             if(indexlp<=targetPrice || indexlp>=stoplossPrice){
               sell_order(tradingsymbol, quantity, productType);
-              break;
+              timer.cancel();
             }              
-          }
+          },
+          );
         }
       }
+
       else if(quantity<0){ //Sell Position
+
         if(op_type == 'CE'){
-          while(true){
+          final periodicTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+            var index_lp = await kite.ltp(result);
+            indexlp = index_lp[result]['last_price'];
             setState(() {
-              indexlp = index_lp[result]['last_price'];
             });
             if(indexlp<=targetPrice || indexlp>=stoplossPrice){
               buy_order(tradingsymbol, quantity, productType);
-              break;
+              timer.cancel();
             }              
-          }
+          },
+          );
         }
 
         else if(op_type == 'PE'){
-          while(true){
+          final periodicTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+            var index_lp = await kite.ltp(result);
+            indexlp = index_lp[result]['last_price'];
             setState(() {
-              indexlp = index_lp[result]['last_price'];
             });
             if(indexlp>=targetPrice || indexlp<=stoplossPrice){
               sell_order(tradingsymbol, quantity, productType);
-              break;
+              timer.cancel();
             }              
-          }
+          },
+          );
         }
       }
+    }
+    
+    
+  }
+
+
+
+  get_last_price_watchlist() async {
+    for(int i=0; i<OrderList.length; i++){
+      String result = "";
+      if(index_name == "NIFTY"){
+        result = 'NSE:NIFTY 50';
+      }
+      else if(index_name == "BANKNIFTY"){
+        result = 'NSE:NIFTY BANK';
+      }
+      else if(index_name == "FINNIFTY"){
+        result = 'NSE:NIFTY FIN SERVICE';
+      }
+      var kite = kiteconnect(enctoken);
+      var index_lp = await kite.ltp(result);
+
+      String op_type = tradingsymbol.substring(tradingsymbol.length - 2);
+      if(productType == "MIS"){
+          productType = kiteconnect.PRODUCT_MIS;
+      }
+      else{
+          productType = kiteconnect.PRODUCT_NRML;
+      }
+      
+      if(op_type == 'CE'){
+        if(posType == 'Buy'){
+            Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+            var index_lp = await kite.ltp(result);
+            indexlp = index_lp[result]['last_price'];
+            setState(() {
+            });
+            if(indexlp>triggerPrice){
+              buy_order(tradingsymbol, quantity, productType);
+              timer.cancel();
+            }              
+            },
+          );
+        }
+
+        else if(posType == 'Sell'){
+            Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+            var index_lp = await kite.ltp(result);
+            indexlp = index_lp[result]['last_price'];
+            setState(() {
+            });
+            if(indexlp<triggerPrice){
+              sell_order(tradingsymbol, quantity, productType);
+              timer.cancel();
+            }              
+            },
+          );
+        }
+        
+      }
+
+      else if(op_type == 'PE'){
+        if(posType == 'Buy'){
+            Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+            var index_lp = await kite.ltp(result);
+            indexlp = index_lp[result]['last_price'];
+            setState(() {
+            });
+            if(indexlp<triggerPrice){
+              buy_order(tradingsymbol, quantity, productType);
+              timer.cancel();
+            }              
+            },
+          );
+        }
+
+        else if(posType == 'Sell'){
+            Timer.periodic(const Duration(milliseconds: 500), (timer) async {
+            var index_lp = await kite.ltp(result);
+            indexlp = index_lp[result]['last_price'];
+            setState(() {
+            });
+            if(indexlp>triggerPrice){
+              sell_order(tradingsymbol, quantity, productType);
+              timer.cancel();
+            }              
+            },
+          );
+        }
+      }
+
     }
     
     
@@ -184,6 +305,9 @@ class order_screenState extends State<order_screen> {
                     // Determine the color based on the quantity
                     Color quantityColor =
                         orderList['quantity'] >= 0 ? Colors.green : Colors.red;
+                    
+                    Color posTypeColor = 
+                        posType == 'Buy' ? Colors.green : Colors.red;
 
                     return Card(
                       elevation: 3,
@@ -220,7 +344,19 @@ class order_screenState extends State<order_screen> {
                             SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                              children: identifier == "watchlist_screen" ? [
+                                Text(
+                                  'Trigger Price: $triggerPrice',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'PosType: $posType',
+                                  style: TextStyle(color: posTypeColor),
+                                ),
+                              ] : identifier == "position_screen" ? [
                                 Text(
                                   'SL: ${orderList['stoploss']}',
                                   style: TextStyle(
@@ -232,7 +368,7 @@ class order_screenState extends State<order_screen> {
                                   'Tgt: ${orderList['target']}',
                                   style: TextStyle(color: Colors.green),
                                 ),
-                              ],
+                              ] : [], // Empty array as a fallback if identifier doesn't match any condition
                             ),
                             SizedBox(height: 5),
 

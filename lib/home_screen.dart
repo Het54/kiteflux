@@ -56,7 +56,7 @@ class _home_screenState extends State<home_screen> {
       ),
        body: <Widget>[
         watchlist_screen(enctoken: enctoken),
-        order_screen(enctoken: enctoken, triggerPrice: 0.0, tradingsymbol: "Null",targetPrice: 0.00,stoplossPrice: 0.00,quantity: 0,productType: Null, exchange: Null,),
+        order_screen(identifier: "home_screen", enctoken: enctoken, triggerPrice: 0.0, tradingsymbol: "Null",targetPrice: 0.00,stoplossPrice: 0.00,quantity: 0,productType: Null, exchange: Null, posType: "",),
         position_screen(enctoken: enctoken),
       ][_selectedIndex],
       

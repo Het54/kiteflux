@@ -37,7 +37,7 @@ class position_screenState extends State<position_screen> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    timer = Timer.periodic(Duration(milliseconds: 500), (Timer t) {
       get_last_price(); // Update positions every second
     });
   }
@@ -268,11 +268,13 @@ class position_screenState extends State<position_screen> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => order_screen(
+                                              identifier: "position_screen",
                                               enctoken: widget.enctoken,
                                               triggerPrice: 0.00,
                                               tradingsymbol: positionList['tradingsymbol'],
                                               targetPrice: targetprice,
                                               stoplossPrice: stoplossprice,
+                                              posType: "",
                                               quantity: positionList['quantity'],
                                               productType: positionList['product'],
                                               exchange: positionList['exchange']),
