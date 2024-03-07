@@ -71,12 +71,14 @@ class position_screenState extends State<position_screen> {
       var lastprice = lastp[result]['last_price'];
       var pnl = PositionList[i]['pnl'];
       var op_type = tradingsymbol.substring(tradingsymbol.length - 2);
+
+      //need to create a condition for buy and sell positions seperately
       if(op_type == "PE"){
         if(qty < 0){
-        pnl = (average-lastprice)*-(qty);
+        pnl = (average-lastprice)*(qty);
         }
         else if(qty > 0){
-          pnl = (average-lastprice)*(qty);
+          pnl = (average-lastprice)*-(qty);
         }
       }
       else if(op_type == "CE"){

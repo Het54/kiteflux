@@ -153,28 +153,31 @@ Future<String?> placeOrder(String variety, String exchange, String tradingsymbol
     'exchange': exchange,
     'tradingsymbol': tradingsymbol,
     'transaction_type': transactionType,
-    'quantity': quantity,
+    'quantity': quantity.toString(),
     'product': product,
     'order_type': orderType,
-    if (price != null) 'price': price,
+    if (price != null) 'price': price.toString(),
     if (validity != null) 'validity': validity,
-    if (disclosedQuantity != null) 'disclosed_quantity': disclosedQuantity,
-    if (triggerPrice != null) 'trigger_price': triggerPrice,
-    if (squareoff != null) 'squareoff': squareoff,
-    if (stoploss != null) 'stoploss': stoploss,
-    if (trailingStoploss != null) 'trailing_stoploss': trailingStoploss,
+    if (disclosedQuantity != null) 'disclosed_quantity': disclosedQuantity.toString(),
+    if (triggerPrice != null) 'trigger_price': triggerPrice.toString(),
+    if (squareoff != null) 'squareoff': squareoff.toString(),
+    if (stoploss != null) 'stoploss': stoploss.toString(),
+    if (trailingStoploss != null) 'trailing_stoploss': trailingStoploss.toString(),
     if (tag != null) 'tag': tag,
   };
 
   params.removeWhere((key, value) => value == null);
 
+  // print(params);
+
   final response = await http.post(
     Uri.parse('${rootUrl}/orders/$variety'),
-    body: jsonEncode(params),
+    body: params,
     headers: headers,
   );
-
+  // print(response);
   final data = jsonDecode(response.body);
+  // print(data);
   return data['data']['order_id'];
 }
 

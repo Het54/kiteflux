@@ -7,6 +7,8 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - keep_screen_on (3.0.0):
+    - Flutter
   - permission_handler_apple (9.3.0):
     - Flutter
   - Toast (4.1.0)
@@ -16,6 +18,7 @@ DEPENDENCIES:
   - flutter_background_service_ios (from `.symlinks/plugins/flutter_background_service_ios/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - keep_screen_on (from `.symlinks/plugins/keep_screen_on/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
 
 SPEC REPOS:
@@ -31,6 +34,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  keep_screen_on:
+    :path: ".symlinks/plugins/keep_screen_on/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
 
@@ -39,6 +44,7 @@ SPEC CHECKSUMS:
   flutter_background_service_ios: e30e0d3ee69e4cee66272d0c78eacd48c2e94aac
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
+  keep_screen_on: bc3e0a8520835eb03d3697ff76e8b1c34637353c
   permission_handler_apple: 036b856153a2b1f61f21030ff725f3e6fece2b78
   Toast: ec33c32b8688982cecc6348adeae667c1b9938da
 

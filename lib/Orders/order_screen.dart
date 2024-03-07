@@ -276,7 +276,7 @@ class order_screenState extends State<order_screen> {
 
   buy_order(t_symbol, quantity, product_type) async{
     var kite = kiteconnect(enctoken);
-    kite.placeOrder(kiteconnect.VARIETY_REGULAR, kiteconnect.EXCHANGE_NFO, t_symbol, kiteconnect.TRANSACTION_TYPE_BUY, quantity, product_type, kiteconnect.ORDER_TYPE_MARKET, null, null,null,null,null,null,null,"Sell_oreder");
+    kite.placeOrder(kiteconnect.VARIETY_REGULAR, kiteconnect.EXCHANGE_NFO, t_symbol, kiteconnect.TRANSACTION_TYPE_BUY, quantity, product_type, kiteconnect.ORDER_TYPE_MARKET, null, null,null,null,null,null,null,"Buy_oreder");
   }
 
   
