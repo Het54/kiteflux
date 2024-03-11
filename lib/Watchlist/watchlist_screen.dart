@@ -1,12 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:kiteflux/Orders/order_screen.dart';
-import 'package:kiteflux/home_screen.dart';
 import 'package:kiteflux/kiteconnect.dart';
-import 'package:kiteflux/Position/position_caardview.dart';
 import 'package:intl/intl.dart';
-import 'package:kiteflux/position/position_screen.dart';
 
 class watchlist_screen extends StatefulWidget {
   const watchlist_screen({Key? key, required this.enctoken}) : super(key: key);
@@ -92,7 +87,15 @@ class watchlist_screenState extends State<watchlist_screen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: const Text('KiteFlux')),
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [
+              Image.asset('ios/Runner/Assets.xcassets/AppIcon.appiconset/50.png'), 
+              const Text('KiteFlux'),
+            ],
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

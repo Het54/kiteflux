@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kiteflux/Orders/order_screen.dart';
-import 'package:kiteflux/home_screen.dart';
 import 'package:kiteflux/kiteconnect.dart';
 
 class position_screen extends StatefulWidget {
@@ -111,7 +110,15 @@ class position_screenState extends State<position_screen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: const Text('KiteFlux')),
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [
+              Image.asset('ios/Runner/Assets.xcassets/AppIcon.appiconset/50.png'), 
+              const Text('KiteFlux'),
+            ],
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

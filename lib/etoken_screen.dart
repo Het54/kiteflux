@@ -3,6 +3,7 @@ import 'package:kiteflux/Position/position_screen.dart';
 import 'package:kiteflux/home_screen.dart';
 import 'package:kiteflux/kiteconnect.dart';
 
+
 class Etoken extends StatefulWidget {  
   
 const Etoken({ Key? key }) : super(key: key);
@@ -29,7 +30,15 @@ class EtokenState extends State<Etoken> {
   @override
 Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: const Text('KiteFlux')),
+    appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center, 
+            children: [
+              Image.asset('ios/Runner/Assets.xcassets/AppIcon.appiconset/50.png'), 
+              const Text('KiteFlux'),
+            ],
+          ),
+        ),
     body: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,

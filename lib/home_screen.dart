@@ -41,10 +41,10 @@ class _home_screenState extends State<home_screen> {
             icon: Icon(Icons.home),
             label: 'WatchLsit',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: 'Orders',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.bookmark),
+          //   label: 'Orders',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
             label: 'Positions',
@@ -56,7 +56,7 @@ class _home_screenState extends State<home_screen> {
       ),
        body: <Widget>[
         watchlist_screen(enctoken: enctoken),
-        order_screen(identifier: "home_screen", enctoken: enctoken, triggerPrice: 0.0, tradingsymbol: "Null",targetPrice: 0.00,stoplossPrice: 0.00,quantity: 0,productType: Null, exchange: Null, posType: "",),
+        // order_screen(identifier: "home_screen", enctoken: enctoken, triggerPrice: 0.0, tradingsymbol: "Null",targetPrice: 0.00,stoplossPrice: 0.00,quantity: 0,productType: Null, exchange: Null, posType: "",),
         position_screen(enctoken: enctoken),
       ][_selectedIndex],
       
