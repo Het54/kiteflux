@@ -74,7 +74,7 @@ class position_screenState extends State<position_screen> {
       //need to create a condition for buy and sell positions seperately
       if(op_type == "PE"){
         if(qty < 0){
-        pnl = (average-lastprice)*(qty);
+          pnl = (average-lastprice)*-(qty);
         }
         else if(qty > 0){
           pnl = (average-lastprice)*-(qty);
@@ -82,7 +82,7 @@ class position_screenState extends State<position_screen> {
       }
       else if(op_type == "CE"){
         if(qty < 0){
-        pnl = (average-lastprice)*(qty);
+          pnl = (average-lastprice)*-(qty);
         }
         else if(qty > 0){
           pnl = (average-lastprice)*-(qty);
