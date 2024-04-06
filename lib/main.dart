@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kiteflux/etoken_screen.dart';
+import 'package:kiteflux/launch_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Etoken(),
+      home: const launch_screen(),
     );
   }
 }

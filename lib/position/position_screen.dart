@@ -36,7 +36,7 @@ class position_screenState extends State<position_screen> {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(milliseconds: 500), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       get_last_price(); // Update positions every second
     });
   }
@@ -90,7 +90,7 @@ class position_screenState extends State<position_screen> {
       }
       
       toatlpnl += pnl; 
-      if (!isDisposed) {
+      if (!isDisposed && qty!=0 ) {
       setState(() {
         PositionList[i]['last_price'] = lastprice;
         PositionList[i]['pnl'] = pnl;

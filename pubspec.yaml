@@ -62,6 +62,8 @@ dev_dependencies:
 flutter:
   assets:
     - ios/Runner/Assets.xcassets/AppIcon.appiconset/50.png
+    - lib/Images/KiteFlux_rbg.png
+    - lib/Images/playstore.png
 
 
   # The following line ensures that the Material Icons font is
